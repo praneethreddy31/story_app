@@ -1,23 +1,35 @@
+import os
 import google.generativeai as genai
+from dotenv import load_dotenv
+import asyncio
 
-# Configure Gemini with your API key
-api_key = "AIzaSyBZnuBnO_tlDzfTvm0-CHsyTfdIodBAaQM"
-genai.configure(api_key=api_key)
+# Load environment variables from .env file
+load_dotenv()
 
-# Test with gemini-2.0-flash
-try:
-    model = genai.GenerativeModel('gemini-2.0-flash')
-    response = model.generate_content("Tell me a creative story idea about a magical forest")
-    print("\n✅ Gemini API is working with gemini-2.0-flash!")
-    print("Response:", response.text)
-except Exception as e:
-    print(f"\n❌ Error with gemini-2.0-flash: {str(e)}")
-    
-    # Fallback to gemini-1.5-flash if 2.0 doesn't work
+async def run_test():
+    """A simple, direct test of the Gemini API connection."""
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        print("ERROR: GEMINI_API_KEY not found in .env file!")
+        return
+
+    print("API Key found. Configuring Gemini...")
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content("Tell me a creative story idea about a magical forest")
-        print("\n✅ Gemini API is working with gemini-1.5-flash!")
-        print("Response:", response.text)
-    except Exception as e2:
-        print(f"\n❌ Error with gemini-1.5-flash: {str(e2)}")
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-1.5-flash') # Using the latest flash model
+        print("Gemini configured. Sending a test prompt...")
+
+        # This is the line that will hang if there is a problem
+        response = await model.generate_content_async("Tell me a short story about a robot.")
+
+        print("\n--- SUCCESS! ---")
+        print(response.text)
+    except Exception as e:
+        print(f"\n--- AN ERROR OCCURRED ---")
+        print(f"Error Type: {type(e).__name__}")
+        print(f"Error Details: {e}")
+
+# Run the asynchronous test function
+if __name__ == "__main__":
+    asyncio.run(run_test())
+
