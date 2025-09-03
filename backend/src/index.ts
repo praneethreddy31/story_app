@@ -22,6 +22,8 @@ import { notFound } from './middleware/notFound';
 // Load environment variables
 dotenv.config();
 
+console.log("--- SERVER BOOTING UP: VERSION WITH AI PROXY DEBUG LOGS ---");
+
 const app = express();
 const server = createServer(app);
 
@@ -71,6 +73,8 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/conversations', conversationRoutes);
 app.use('/api/ai', aiProxyRoutes); // <-- The AI route is now here with the others
+
+console.log("--- AI PROXY ROUTE has been successfully registered. ---");
 
 // 4. Socket.io connection handling
 io.on('connection', (socket) => {
