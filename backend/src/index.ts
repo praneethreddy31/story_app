@@ -24,10 +24,13 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
+// Get the frontend URL from environment variables for CORS
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200'; // CHANGED
+
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://localhost:4200"],
+    origin: frontendUrl, // CHANGED
     methods: ["GET", "POST"]
   }
 });
@@ -42,7 +45,7 @@ const limiter = rateLimit({
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:4200"],
+  origin: frontendUrl, // CHANGED
   credentials: true
 }));
 app.use(morgan('combined'));
@@ -52,8 +55,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   });
