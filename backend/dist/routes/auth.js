@@ -41,12 +41,18 @@ const client_1 = require("@prisma/client");
 const auth_1 = require("../middleware/auth");
 const router = express.Router();
 const prisma = new client_1.PrismaClient();
-const generateToken = (id) => {
+const generateToken = (user) => {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
         throw new Error('JWT_SECRET is not defined');
     }
-    return jwt.sign({ id }, secret);
+    return jwt.sign({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60)
+    }, secret);
 };
 router.post('/register', [
     (0, express_validator_1.body)('email').isEmail().withMessage('Please provide a valid email'),
@@ -94,7 +100,7 @@ router.post('/register', [
                 updatedAt: true
             }
         });
-        const token = generateToken(user.id);
+        const token = generateToken(user);
         res.status(201).json({
             success: true,
             data: {
@@ -163,7 +169,7 @@ router.post('/login', [
             });
             return;
         }
-        const token = generateToken(user.id);
+        const token = generateToken(user);
         const { password: _, ...userWithoutPassword } = user;
         res.json({
             success: true,
@@ -217,6 +223,25 @@ router.get('/me', auth_1.protect, async (req, res) => {
         res.status(500).json({
             success: false,
             error: 'Server error while fetching user'
+        });
+    }
+});
+router.get('/validate', auth_1.protect, async (req, res) => {
+    try {
+        res.json({
+            success: true,
+            data: {
+                valid: true
+            }
+        });
+    }
+    catch (error) {
+        console.error('Token validation error:', error);
+        res.status(401).json({
+            success: false,
+            data: {
+                valid: false
+            }
         });
     }
 });
