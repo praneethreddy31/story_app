@@ -6,28 +6,25 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // This now reads the database URL from environment variables
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  isActive  Boolean  @default(true)
-  isVerified Boolean @default(false)
-  role      String   @default("USER") // USER, ADMIN, MODERATOR
-  
-  // Profile preferences
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String
+  password    String
+  isActive    Boolean  @default(true)
+  isVerified  Boolean  @default(false)
+  role        String   @default("USER") // USER, ADMIN, MODERATOR
   preferences String? // Store user preferences as JSON string
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
-  projects Project[]
-  versions VersionHistory[]
+  projects      Project[]
+  versions      VersionHistory[]
   conversations Conversation[]
 
   @@map("users")
@@ -39,19 +36,15 @@ model Project {
   genre       String?
   status      String   @default("DRAFT") // DRAFT, IN_PROGRESS, COMPLETE, ARCHIVED
   description String?
-  
-  // Owner
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
-  sessions    Session[]
+  sessions      Session[]
   conversations Conversation[]
-  
+
   @@map("projects")
 }
 
@@ -59,18 +52,14 @@ model Session {
   id        String   @id @default(cuid())
   projectId String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  // Session metadata
   title     String?
   isActive  Boolean  @default(true)
-  
-  // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // Relations
-  messages  Message[]
-  
+  messages Message[]
+
   @@map("sessions")
 }
 
@@ -78,19 +67,15 @@ model Message {
   id        String   @id @default(cuid())
   sessionId String
   session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  
-  // Message content
   content   String
-  sender    String   // USER, AI
-  metadata  String?  // Store additional metadata as JSON string
-  
-  // Timestamps
+  sender    String // USER, AI
+  metadata  String? // Store additional metadata as JSON string
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // Relations
-  versions  VersionHistory[]
-  
+  versions VersionHistory[]
+
   @@map("messages")
 }
 
@@ -98,16 +83,12 @@ model VersionHistory {
   id        String   @id @default(cuid())
   messageId String
   message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  
-  // Version metadata
   content   String
-  editType  String   // USER, SYSTEM
-  editedBy  String?  // User ID who made the edit
+  editType  String // USER, SYSTEM
+  editedBy  String? // User ID who made the edit
   user      User?    @relation(fields: [editedBy], references: [id])
-  
-  // Timestamps
   createdAt DateTime @default(now())
-  
+
   @@map("version_history")
 }
 
@@ -115,18 +96,14 @@ model Conversation {
   id        String   @id @default(cuid())
   projectId String
   userId    String
-  
-  // Conversation data
-  messages  String   // Store messages as JSON string
-  
-  // Timestamps
+  messages  String // Store messages as JSON string
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // Relations
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([projectId])
   @@map("conversations")
 }
