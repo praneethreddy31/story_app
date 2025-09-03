@@ -18,6 +18,8 @@ import conversationRoutes from './routes/conversations';
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
 
+import aiProxyRoutes from './routes/aiProxy';
+
 // Load environment variables
 dotenv.config();
 
@@ -44,6 +46,8 @@ const limiter = rateLimit({
 
 // Middleware
 app.use(helmet());
+
+app.use('/api/ai', aiProxyRoutes);
 
 // Use CORS with the correct frontend URL. This will automatically handle
 // the "preflight" permission check requests from the browser.

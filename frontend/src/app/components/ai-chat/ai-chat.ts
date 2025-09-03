@@ -890,7 +890,7 @@ export class StoryTellerComponent implements OnInit {
 
       console.log('Sending request to AI service:', requestBody);
       
-      const response = await this.http.post(`${environment.aiServiceUrl}/api/v1/conversational/conversation`, requestBody).toPromise();
+      const response = await this.http.post(`${environment.backendUrl}/api/ai/generate`, requestBody).toPromise();
 
       console.log('AI Service Response:', response);
       
