@@ -13,12 +13,11 @@ import projectRoutes from './routes/projects';
 import sessionRoutes from './routes/sessions';
 import messageRoutes from './routes/messages';
 import conversationRoutes from './routes/conversations';
+import aiProxyRoutes from './routes/aiProxy';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
-
-import aiProxyRoutes from './routes/aiProxy';
 
 // Load environment variables
 dotenv.config();
@@ -26,58 +25,54 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
-// Get the live frontend URL from environment variables for the CORS guest list
+// Get the live frontend URL from environment variables
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
 
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: frontendUrl, // Use the correct URL
+    origin: frontendUrl,
     methods: ["GET", "POST"]
   }
 });
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
   message: 'Too many requests from this IP, please try again later.'
 });
 
-// Middleware
+// --- CORRECT MIDDLEWARE ORDER ---
+
+// 1. Core Middleware (Security, CORS, Logging, Body Parsers)
 app.use(helmet());
-
-app.use('/api/ai', aiProxyRoutes);
-
-// Use CORS with the correct frontend URL. This will automatically handle
-// the "preflight" permission check requests from the browser.
 app.use(cors({
   origin: frontendUrl,
   credentials: true
 }));
-
 app.use(morgan('combined'));
-app.use(limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(limiter);
 
-// Health check endpoint
+// 2. Health check endpoint (can be before routes)
 app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    timestamp: new Date().toISOString()
   });
 });
 
-// API Routes
+// 3. API Routes (Your application's logic)
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/conversations', conversationRoutes);
+app.use('/api/ai', aiProxyRoutes); // <-- The AI route is now here with the others
 
-// Socket.io connection handling
+// 4. Socket.io connection handling
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
   // ... (rest of your socket logic)
@@ -86,7 +81,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// Error handling middleware
+// 5. Final "Catch-All" Error Handling Middleware (MUST BE LAST)
 app.use(notFound);
 app.use(errorHandler);
 
