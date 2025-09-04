@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  backendUrl: 'https://story-app-backend-2c0c.onrender.com',
-  aiServiceUrl: 'http://localhost:8000',
+  backendUrl: 'https://story-app-backend-37gk.onrender.com/',
+  aiServiceUrl: 'http://ai-service-app-env.eba-bmapzmun.ap-south-1.elasticbeanstalk.com',
   apiVersion: 'v1'
 };
