@@ -14,7 +14,7 @@ router.post('/generate', protect, async (req: Request, res: Response) => { // <-
         // 2. The Manager securely calls the Kitchen, sending the customer's order (req.body)
         //    and showing his secret key (the Authorization header)
         const response = await axios.post(
-            `${aiServiceUrl}/api/v1/conversational`, // The path to the kitchen's order window
+            `${aiServiceUrl}/api/v1/conversational/conversation`, // The path to the kitchen's order window
             req.body,
             {
                 headers: {
