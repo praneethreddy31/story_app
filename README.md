@@ -69,9 +69,16 @@ idea-to-story-engine/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd idea-to-story-engine
+   # For contributors: First fork the repository on GitHub, then:
+   git clone https://github.com/YOUR_USERNAME/story_app.git
+   cd story_app
+   
+   # For just running the app:
+   git clone https://github.com/praneethreddy31/story_app.git
+   cd story_app
    ```
+
+   > 💡 **Want to contribute?** Click the "Fork" button on [GitHub](https://github.com/praneethreddy31/story_app) first, then clone your fork. See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
 
 2. **Set up environment variables**
    ```bash
@@ -209,15 +216,33 @@ docker-compose up -d
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+We welcome contributions from the community! Here's how you can get started:
+
+### Quick Start for Contributors
+1. **Fork the repository** on GitHub by clicking the "Fork" button at the top-right
+2. **Clone your fork** locally: `git clone https://github.com/YOUR_USERNAME/story_app.git`
+3. **Create a feature branch**: `git checkout -b feature/your-feature-name`
+4. **Make your changes** and add tests
+5. **Submit a pull request** to the main repository
+
+### Detailed Instructions
+For comprehensive setup instructions, development guidelines, and contribution best practices, please see our [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+### Ways to Contribute
+- 🐛 **Report bugs** or suggest features via [GitHub Issues](https://github.com/praneethreddy31/story_app/issues)
+- 💻 **Submit code** improvements or new features
+- 📖 **Improve documentation** to help other developers
+- 🧪 **Add tests** to increase code coverage
+- 🎨 **Enhance UI/UX** for better user experience
+
+### Getting Help
+- Check out issues labeled `good first issue` for beginner-friendly tasks
+- Join discussions in the [GitHub Discussions](https://github.com/praneethreddy31/story_app/discussions) section
+- Review the [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup instructions
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 

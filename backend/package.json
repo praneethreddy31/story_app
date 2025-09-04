@@ -22,7 +22,7 @@
     "api"
   ],
   "author": "Story Engine Team",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "dependencies": {
     "@prisma/client": "^6.15.0",
     "axios": "^1.11.0",

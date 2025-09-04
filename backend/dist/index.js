@@ -17,9 +17,11 @@ const projects_1 = __importDefault(require("./routes/projects"));
 const sessions_1 = __importDefault(require("./routes/sessions"));
 const messages_1 = __importDefault(require("./routes/messages"));
 const conversations_1 = __importDefault(require("./routes/conversations"));
+const aiProxy_1 = __importDefault(require("./routes/aiProxy"));
 const errorHandler_1 = require("./middleware/errorHandler");
 const notFound_1 = require("./middleware/notFound");
 dotenv_1.default.config();
+console.log("--- SERVER BOOTING UP: VERSION WITH AI PROXY DEBUG LOGS ---");
 const app = (0, express_1.default)();
 exports.app = app;
 const server = (0, http_1.createServer)(app);
@@ -42,14 +44,13 @@ app.use((0, cors_1.default)({
     credentials: true
 }));
 app.use((0, morgan_1.default)('combined'));
-app.use(limiter);
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use(limiter);
 app.get('/health', (req, res) => {
     res.json({
         status: 'OK',
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
+        timestamp: new Date().toISOString()
     });
 });
 app.use('/api/auth', auth_1.default);
@@ -57,6 +58,8 @@ app.use('/api/projects', projects_1.default);
 app.use('/api/sessions', sessions_1.default);
 app.use('/api/messages', messages_1.default);
 app.use('/api/conversations', conversations_1.default);
+app.use('/api/ai', aiProxy_1.default);
+console.log("--- AI PROXY ROUTE has been successfully registered. ---");
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
     socket.on('disconnect', () => {
