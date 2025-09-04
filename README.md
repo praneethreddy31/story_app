@@ -2,6 +2,16 @@
 
 A comprehensive platform that transforms creative ideas into compelling stories using AI-powered tools and collaborative features.
 
+## 🍴 Want to Fork This Project?
+
+**Quick Fork Guide:**
+1. Click the "Fork" button at the top-right of this GitHub page
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/story_app.git`
+3. Follow the setup instructions below
+4. See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed development guidelines
+
+---
+
 ## 🚀 Features
 
 - **Conversational AI**: Chat with AI to develop story ideas through natural conversation
@@ -118,48 +128,22 @@ idea-to-story-engine/
 
 ## 📁 Project Structure
 
-### Angular Frontend (`/angular-frontend`)
 ```
-angular-frontend/
-├── src/
-│   ├── app/
-│   │   ├── components/     # Angular components
-│   │   ├── services/       # API services
-│   │   ├── guards/         # Route guards
-│   │   └── models/         # TypeScript interfaces
-│   ├── assets/             # Static assets
-│   └── styles/             # Global styles
-```
-│   ├── types/         # TypeScript types
-│   └── utils/         # Utility functions
-├── public/            # Static assets
-└── package.json
-```
-
-### Backend (`/backend`)
-```
-backend/
-├── src/
-│   ├── controllers/   # Route controllers
-│   ├── middleware/    # Express middleware
-│   ├── models/        # Prisma models
-│   ├── services/      # Business logic
-│   ├── routes/        # API routes
-│   └── utils/         # Utility functions
-├── prisma/            # Database schema
-└── package.json
-```
-
-### AI Service (`/ai-service`)
-```
-ai-service/
-├── app/
-│   ├── models/        # AI models
-│   ├── services/      # AI services
-│   ├── api/           # API endpoints
-│   └── utils/         # Utility functions
-├── requirements.txt
-└── main.py
+story_app/
+├── frontend/           # Angular frontend application
+│   ├── src/app/       # Angular components and services
+│   ├── src/assets/    # Static assets
+│   └── package.json   # Frontend dependencies
+├── backend/           # Node.js + Express backend
+│   ├── src/           # TypeScript source files
+│   ├── prisma/        # Database schema and migrations
+│   └── package.json   # Backend dependencies
+├── ai-service/        # Python FastAPI AI service
+│   ├── app/           # Python application code
+│   └── requirements.txt # Python dependencies
+├── .env.example       # Environment variables template
+├── CONTRIBUTING.md    # Contribution guidelines
+└── README.md          # This file
 ```
 
 ## 🔧 Configuration
