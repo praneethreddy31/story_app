@@ -8,7 +8,7 @@ import asyncio
 class GeminiService:
     def __init__(self):
         # Use the provided Gemini API key
-        api_key = "AIzaSyBZnuBnO_tlDzfTvm0-CHsyTfdIodBAaQM"
+        api_key = "AIzaSyCE8H1mLO5pZztrbFS4jerVPpa0a9bCa9s"
         
         # Configure Gemini
         genai.configure(api_key=api_key)
