@@ -1,4 +1,4 @@
-import os
+import os  # Make sure "import os" is at the top of the file
 import google.generativeai as genai
 from typing import List, Dict, Any, Optional
 import json
@@ -7,12 +7,15 @@ import asyncio
 
 class GeminiService:
     def __init__(self):
-        # Use the provided Gemini API key
-        api_key = "AIzaSyCE8H1mLO5pZztrbFS4jerVPpa0a9bCa9s"
+        # FIX: Read the Gemini API key from environment variables
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            # This will stop the server if the key is missing
+            raise ValueError("CRITICAL: GEMINI_API_KEY is not set in the environment!")
         
         # Configure Gemini
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-2.0-flash')  # Use 2.0-flash model for better performance
+        self.model = genai.GenerativeModel('gemini-2.0-flash')
         
     async def generate_story_response(
         self, 
